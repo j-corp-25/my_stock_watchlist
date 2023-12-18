@@ -1,14 +1,15 @@
 const asyncHandler = require('express-async-handler')
+const Watchlist = require('../models/watchlistModel')
 
 // @desc GET watchlists
 // @route GET /api/watchlists
 // @access Private
 const getWatchlist = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: "im from the get all controller" });
+  
 });
 
-// @desc Create watchlists
-// @route POST /api/watchlists
+// @desc Create watchlist
+// @route POST /api/watchlist
 // @access Private
 const createWatchlist = asyncHandler(async (req, res) => {
     if(!req.body.text){
