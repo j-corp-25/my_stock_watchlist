@@ -30,13 +30,37 @@ const createWatchlist = asyncHandler(async (req, res) => {
 // @route PATCH /api/watchlists/:id
 // @access Private
 const updateWatchlist = asyncHandler(async (req, res) => {
+  const watchlist = await Watchlist.findById(req.params.id);
+
+  if (!watchlist) {
+    res.status(400);
+    throw new Error("Watchlist not found");
+  }
+
+  const updatedWatchlist = await Watchlist.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    {
+      new: true,
+    }
+  );
+
+  res.status(200).json(updatedWatchlist);
 });
 
 // @desc Delete watchlists
 // @route DELETE /api/watchlists/:id
 // @access Private
 const deleteWatchlist = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: "im from the controller delete" });
+  const watchlist = await Watchlist.findById(req.params.id);
+
+  if (!watchlist) {
+    res.status(400);
+    throw new Error("Watchlist not found");
+  }
+  await Watchlist.findByIdAndDelete(req.params.id);
+
+  res.status(200).json({ id: req.params.id });
 });
 
 module.exports = {
