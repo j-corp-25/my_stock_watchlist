@@ -6,8 +6,18 @@ const {
   updateWatchlist,
   deleteWatchlist,
 } = require("../controllers/watchlistController");
+const { protect } = require("../middleware/authMiddleware");
 
-router.route("/").get(getWatchlist).post(createWatchlist);
-router.route("/:id").delete(deleteWatchlist).patch(updateWatchlist);
+router
+  // create and read watchlists routes
+  .route("/")
+  .get(protect, getWatchlist)
+  .post(protect, createWatchlist);
+
+  // update and delete watchlists routes
+router
+  .route("/:id")
+  .delete(protect, deleteWatchlist)
+  .patch(protect, updateWatchlist);
 
 module.exports = router;

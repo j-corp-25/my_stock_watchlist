@@ -1,11 +1,12 @@
 const asyncHandler = require("express-async-handler");
 const Watchlist = require("../models/watchlistModel");
+const User = require("../models/userModel");
 
 // @desc GET watchlists
 // @route GET /api/watchlists
 // @access Private
 const getWatchlist = asyncHandler(async (req, res) => {
-  const watchlists = await Watchlist.find();
+  const watchlists = await Watchlist.find({ user: req.user.id });
   res.status(200).json(watchlists);
 });
 
@@ -21,6 +22,7 @@ const createWatchlist = asyncHandler(async (req, res) => {
     name: req.body.name,
     description: req.body.description,
     tickers: req.body.tickers,
+    user: req.user.id,
   });
 
   res.status(200).json(watchlist);
@@ -35,6 +37,19 @@ const updateWatchlist = asyncHandler(async (req, res) => {
   if (!watchlist) {
     res.status(400);
     throw new Error("Watchlist not found");
+  }
+
+  const user = await User.findById(req.user.id);
+
+  // check for user
+  if (!user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
+  // Check to see if logged in user matches the watchlist user
+  if (watchlist.user.toString() !== user.id) {
+    res.status(401);
+    throw new Error("User not authorized");
   }
 
   const updatedWatchlist = await Watchlist.findByIdAndUpdate(
@@ -57,6 +72,18 @@ const deleteWatchlist = asyncHandler(async (req, res) => {
   if (!watchlist) {
     res.status(400);
     throw new Error("Watchlist not found");
+  }
+  const user = await User.findById(req.user.id);
+
+  // check for user
+  if (!user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
+  // Check to see if logged in user matches the watchlist user
+  if (watchlist.user.toString() !== user.id) {
+    res.status(401);
+    throw new Error("User not authorized");
   }
   await Watchlist.findByIdAndDelete(req.params.id);
 
