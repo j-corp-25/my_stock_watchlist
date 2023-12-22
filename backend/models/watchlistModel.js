@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 
 const watchlistSchema = mongoose.Schema(
   {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
     name: {
       type: String,
       required: [true, " Watchlist name cannot be blank"],
@@ -17,4 +22,4 @@ const watchlistSchema = mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Watchlist",watchlistSchema)
+module.exports = mongoose.model("Watchlist", watchlistSchema);

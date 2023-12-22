@@ -10,7 +10,7 @@ const getWatchlist = asyncHandler(async (req, res) => {
 });
 
 // @desc Create watchlist
-// @route POST /api/watchlist
+// @route POST /api/watchlists
 // @access Private
 const createWatchlist = asyncHandler(async (req, res) => {
   if (!req.body.name) {
