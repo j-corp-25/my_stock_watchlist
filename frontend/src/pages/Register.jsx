@@ -17,7 +17,9 @@ function Register() {
       [e.target.name]: e.target.value,
     }));
   };
-  const onSubmit = () => {};
+  const onSubmit = (e) => {
+    e.preventDefault();
+  };
   return (
     <>
       <section className="heading">
